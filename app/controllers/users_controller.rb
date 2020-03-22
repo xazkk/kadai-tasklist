@@ -8,6 +8,7 @@ class UsersController < ApplicationController
     
     if @user.save
       flash[:success] = 'ユーザを登録しました。'
+      login(@user.email, @user.password)
       redirect_to tasks_path
     else
       flash.now[:danger] = 'ユーザの登録に失敗しました。'
@@ -19,5 +20,17 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
+  end
+  
+  def login(email, password)
+    @user = User.find_by(email: email)
+    if @user && @user.authenticate(password)
+      # ログイン成功
+      session[:user_id] = @user.id
+      return true
+    else
+      # ログイン失敗
+      return false
+    end
   end
 end
