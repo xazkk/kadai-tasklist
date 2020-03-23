@@ -8,8 +8,10 @@ class UsersController < ApplicationController
     
     if @user.save
       flash[:success] = 'ユーザを登録しました。'
-      login(@user.email, @user.password)
-      redirect_to tasks_path
+      #ログイン後にタスク一覧に遷移する場合
+      #login(@user.email, @user.password)
+      #redirect_to tasks_path
+      redirect_to login_path
     else
       flash.now[:danger] = 'ユーザの登録に失敗しました。'
       render :new
